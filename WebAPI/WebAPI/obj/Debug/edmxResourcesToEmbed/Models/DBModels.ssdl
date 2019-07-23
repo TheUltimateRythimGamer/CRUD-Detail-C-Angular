@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="RestauranteDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Cliente">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Item">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+    <Property Name="Precio" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="Orden">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NoOrder" Type="varchar" MaxLength="50" />
+    <Property Name="ClienteId" Type="int" />
+    <Property Name="MetPago" Type="varchar" MaxLength="50" />
+    <Property Name="PrecioTotal" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="OrdenItem">
+    <Key>
+      <PropertyRef Name="OrdenItemId" />
+    </Key>
+    <Property Name="OrdenItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrdenId" Type="int" />
+    <Property Name="ItemId" Type="int" />
+    <Property Name="Cantidad" Type="int" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <Association Name="FK_Orden_Cliente">
+    <End Role="Cliente" Type="Self.Cliente" Multiplicity="0..1" />
+    <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cliente">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orden">
+        <PropertyRef Name="ClienteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrdenItem_Item">
+    <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+    <End Role="OrdenItem" Type="Self.OrdenItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrdenItem">
+        <PropertyRef Name="ItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrdenItem_Orden">
+    <End Role="Orden" Type="Self.Orden" Multiplicity="0..1" />
+    <End Role="OrdenItem" Type="Self.OrdenItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orden">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrdenItem">
+        <PropertyRef Name="OrdenId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="RestauranteDBModelStoreContainer">
+    <EntitySet Name="Cliente" EntityType="Self.Cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Orden" EntityType="Self.Orden" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrdenItem" EntityType="Self.OrdenItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Orden_Cliente" Association="Self.FK_Orden_Cliente">
+      <End Role="Cliente" EntitySet="Cliente" />
+      <End Role="Orden" EntitySet="Orden" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrdenItem_Item" Association="Self.FK_OrdenItem_Item">
+      <End Role="Item" EntitySet="Item" />
+      <End Role="OrdenItem" EntitySet="OrdenItem" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrdenItem_Orden" Association="Self.FK_OrdenItem_Orden">
+      <End Role="Orden" EntitySet="Orden" />
+      <End Role="OrdenItem" EntitySet="OrdenItem" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
