@@ -5,12 +5,14 @@ import { OrdenComponent } from './ordenes/orden/orden.component';
 
 
 const routes: Routes = [
-  {path:'ordenes',component: OrdenesComponent},
-  {path:'orden', children:[
-    {path:'',component:OrdenComponent},
-    {path:'edit/:id',component:OrdenComponent}
-  ]},
-  {path:'**', redirectTo:'ordenes', pathMatch:'full'}
+  { path: 'ordenes', component: OrdenesComponent },
+  {
+    path: 'orden', children: [
+      { path: '', component: OrdenComponent },
+      { path: 'edit/:id', component: OrdenComponent }
+    ]
+  },
+  {path:'**', redirectTo:'orden', pathMatch:'full'}
 ];
 
 @NgModule({
