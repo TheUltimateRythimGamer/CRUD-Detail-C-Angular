@@ -25,6 +25,7 @@ export class OrdenComponent implements OnInit {
       MetPago: '',
       PrecioTotal: 0
     }
+    this._ordenService.ordenItems = [];
   }
 
 }
