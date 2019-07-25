@@ -3,4 +3,7 @@ export class OrdenItem {
     OrdenId:number;
     ItemId:number;
     Cantidad:number;
+    NombreItem: string; 
+    Precio: number;
+    Total: number;
 }
