@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdenService } from 'src/app/shared/orden.service';
 import { NgForm } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { OrdenItemsComponent } from '../orden-items/orden-items.component';
 
 @Component({
   selector: 'app-orden',
@@ -9,7 +11,7 @@ import { NgForm } from '@angular/forms';
 })
 export class OrdenComponent implements OnInit {
 
-  constructor(private _ordenService: OrdenService) { }
+  constructor(private _ordenService: OrdenService, private dialog:MatDialog) { }
 
   ngOnInit() {
     this.resetForm();
@@ -27,5 +29,14 @@ export class OrdenComponent implements OnInit {
     }
     this._ordenService.ordenItems = [];
   }
-
+  AddOrEditOrdenItem(OrdenItemIndex, OrdenID){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+    dialogConfig.disableClose = true;
+    dialogConfig.width = "50%";
+    dialogConfig.data = {
+      OrdenItemIndex, OrdenID
+    }
+    this.dialog.open(OrdenItemsComponent, dialogConfig);
+  }
 }
