@@ -55,32 +55,45 @@
     <!-- Orden Items table-->
     <table class="table table-borderless">
         <thead class="thead-light">
-            <th>Item</th>
+            <th>Comida</th>
             <th>Precio</th>
             <th>Cantidad</th>
             <th>Total</th>
-            <th></th>
+            <th>
+                <a class="btn btn-sm btn-success text-white"
+                    (click)="AddOrEditOrdenItem(null,_ordenService.formData.Id)">
+                    <i class="fa fa-plus"></i> Añadir nuevo
+                </a>
+            </th>
         </thead>
         <tbody>
             <tr *ngIf="_ordenService.ordenItems.length==0">
-                <td class="font-italic text-center">
+                <td class="font-italic text-center" colspan="5">
                     No hay comida agregada
                 </td>
             </tr>
-            <tr *ngFor="let item of _ordenService.ordenItems">
+            <tr *ngFor="let item of _ordenService.ordenItems; let i = index;">
                 <td>{{item.NombreItem}}</td>
                 <td>{{item.Precio}}</td>
                 <td>{{item.Cantidad}}</td>
                 <td>{{item.Total}} </td>
-                <td></td>
+                <td>
+                    <a class="btn btn-sm btn-info text-white"
+                        (click)="AddOrEditOrdenItem(i,_ordenService.formData.Id)">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
+
     <div class="form-group">
+
         <button type="submit" class="btn btn-dark">
-            Enviar
             <i class="fa fa-database"></i>
+            Enviar
         </button>
+        
     </div>
 
 
