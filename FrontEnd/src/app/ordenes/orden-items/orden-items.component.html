@@ -5,8 +5,9 @@
 
     <div class="form-group">
         <label>Comida</label>
-        <select name="ItemID" #ItemID="ngModel" [(ngModel)]="formData.ItemId" class="form-control">
+        <select name="ItemID" #ItemID="ngModel" [(ngModel)]="formData.ItemId" class="form-control" (change)="updatePrecio($event.target)">
             <option value="0">--Select--</option>
+            <option *ngFor="let item of itemList" value="{{item.Id}}">{{item.Nombre}}</option>
         </select>
     </div>
 

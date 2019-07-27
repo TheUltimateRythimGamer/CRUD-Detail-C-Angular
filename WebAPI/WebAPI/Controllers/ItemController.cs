@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
 
         // GET: api/Item
         public IQueryable<Item> GetItem()
-        {
+         {
             return db.Item;
         }
 
