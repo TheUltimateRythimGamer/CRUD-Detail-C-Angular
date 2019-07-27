@@ -5,6 +5,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatDialogModule} from '@angular/material/dialog'; 
 import { HttpClientModule } from "@angular/common/http";
 
+import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { OrdenesComponent } from './ordenes/ordenes.component';
@@ -25,7 +27,8 @@ import { OrdenService } from './shared/orden.service';
     FormsModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    HttpClientModule
+    HttpClientModule,
+    SweetAlert2Module.forRoot()
   ],
   entryComponents:[OrdenItemsComponent],
   providers: [OrdenService],
