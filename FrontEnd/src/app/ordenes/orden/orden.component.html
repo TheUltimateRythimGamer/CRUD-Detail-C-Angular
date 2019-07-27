@@ -21,7 +21,7 @@
                 <label>Cliente </label>
                 <select name="ClienteId" #ClienteId="ngModel" [(ngModel)]="_ordenService.formData.ClienteId"
                     class="form-control">
-                    <option value="0">--Select--</option>
+                    <option value="0">--Seleccionar--</option>
                 </select>
             </div>
 
@@ -33,7 +33,7 @@
                 <label>Metdo Pago</label>
                 <select class="form-control" name="MetPago" #MetPago="ngModel"
                     [(ngModel)]="_ordenService.formData.MetPago">
-                    <option value="">--Select--</option>
+                    <option value="">--Seleccionar--</option>
                     <option value="Efectivo">Efectivo</option>
                     <option value="Tarjeta">Tarjeta</option>
                 </select>
