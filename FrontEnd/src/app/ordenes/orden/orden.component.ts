@@ -37,5 +37,9 @@ export class OrdenComponent implements OnInit {
     dialogConfig.data = { OrdenItemIndex, OrdenID }
     this.dialog.open(OrdenItemsComponent, dialogConfig);
   }
+  onDeleteOrdenItem(ordenItemID:number, i:number){
+    this._ordenService.ordenItems.splice(i,1);
+
+  }
 
 }
