@@ -34,9 +34,8 @@ export class OrdenComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.disableClose = true;
     dialogConfig.width = "50%";
-    dialogConfig.data = {
-      OrdenItemIndex, OrdenID
-    }
+    dialogConfig.data = { OrdenItemIndex, OrdenID }
     this.dialog.open(OrdenItemsComponent, dialogConfig);
   }
+
 }

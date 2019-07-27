@@ -15,15 +15,16 @@ import { OrdenService } from 'src/app/shared/orden.service';
 export class OrdenItemsComponent implements OnInit {
   formData: OrdenItem;
   itemList: Item[];
+  isValid: boolean = true;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data,
     public dialogRef: MatDialogRef<OrdenItemsComponent>,
     private _Item: ItemService,
-    private _orderSer:OrdenService) {
+    private _orderSer: OrdenService) {
   }
 
   ngOnInit() {
-
     this._Item.getItemList().then(res => { this.itemList = res as Item[] },
       (err) => {
         console.log(err);
@@ -31,18 +32,23 @@ export class OrdenItemsComponent implements OnInit {
           type: 'error',
           title: 'Error',
           text: 'No hay conexion con el servidor lo sentimos :,('
-        })
+        });
       });
-    this.formData = {
-      OrdenItemId: null,
-      OrdenId: this.data.OrdenID,
-      ItemId: 0,
-      NombreItem: '',
-      Precio: 0,
-      Cantidad: 1,
-      Total: 0
+    if (this.data.OrdenItemIndex == null) {
+      this.formData = {
+        OrdenItemId: null,
+        OrdenId: this.data.OrdenID,
+        ItemId: 0,
+        NombreItem: '',
+        Precio: 0,
+        Cantidad: 1,
+        Total: 0
+      }
+    } else {
+      this.formData = Object.assign([], this._orderSer.ordenItems[this.data.OrdenItemIndex]);
     }
   }
+
   updatePrecio(ctrl) {
     if (ctrl.selectedIndex == 0) {
       this.formData.Precio = 0;
@@ -58,9 +64,28 @@ export class OrdenItemsComponent implements OnInit {
   updateTotal() {
     this.formData.Total = parseFloat((this.formData.Cantidad * this.formData.Precio).toFixed(2));
   }
-  onSubmit(form:NgForm){
-    this._orderSer.ordenItems.push(form.value);
-    this.dialogRef.close();
+  onSubmit(form: NgForm) {
+    if (this.validateForm(form.value)) {
+      if(this.data.OrdenItemIndex == null)
+        this._orderSer.ordenItems.push(form.value);
+      else 
+        this._orderSer.ordenItems[this.data.OrdenItemIndex] = form.value;
+      this.dialogRef.close();
+    }
+    else {
+      Swal.fire({
+        type: 'error',
+        title: 'Error',
+        text: 'Tiene elementos erroneos.'
+      });
+    }
   }
-
+  validateForm(formData: OrdenItem) {
+    this.isValid = true;
+    if (formData.ItemId == 0 || formData.ItemId == undefined)
+      this.isValid = false;
+    else if (formData.Cantidad == 0)
+      this.isValid = false;
+    return this.isValid;
+  }
 }

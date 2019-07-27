@@ -10,8 +10,9 @@
     <input type="hidden" name="NombreItem" #NombreItem="ngModel" [(ngModel)]="formData.NombreItem" class="form-control">
     <div class="form-group">
         <label>Comida</label>
-        <select name="ItemID" #ItemID="ngModel" [(ngModel)]="formData.ItemId" class="form-control"
-            (change)="updatePrecio($event.target)">
+        <select name="ItemId" #ItemId="ngModel" [(ngModel)]="formData.ItemId" class="form-control"
+            (change)="updatePrecio($event.target)"
+            [class.is-invalid]="!isValid && formData.ItemId == 0">
             <option value="0">--Seleccionar--</option>
             <option *ngFor="let item of itemList" value="{{item.Id}}">{{item.Nombre}}</option>
         </select>
@@ -31,7 +32,8 @@
         <div class="form-group col-md-6">
             <label>Cantidad</label>
             <div class="input-group">
-                <input class="form-control" name="Cantidad" #Cantidad="ngModel" [(ngModel)]="formData.Cantidad" (keyup)="updateTotal()">
+                <input class="form-control" name="Cantidad" #Cantidad="ngModel" [(ngModel)]="formData.Cantidad" (keyup)="updateTotal()"
+                [class.is-invalid]="!isValid && formData.Cantidad == 0">
             </div>
         </div>
     </div>
