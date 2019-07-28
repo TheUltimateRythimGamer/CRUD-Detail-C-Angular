@@ -3,6 +3,7 @@ import { OrdenService } from 'src/app/shared/orden.service';
 import { NgForm } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { OrdenItemsComponent } from '../orden-items/orden-items.component';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-orden',
@@ -37,5 +38,25 @@ export class OrdenComponent implements OnInit {
     dialogConfig.data = { OrdenItemIndex, OrdenID }
     this.dialog.open(OrdenItemsComponent, dialogConfig);
   }
-
+  onDeleteOrdenItem(ordenItemId:number, i : number){
+    Swal.fire({
+      title: 'Estas segurx?',
+      text: "Seguro de querer eliminar esto",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminalo!',
+      cancelButtonText:'No lo elimines'
+    }).then((result) => {
+      if (result.value) {
+        this._ordenService.ordenItems.splice(i,1);
+        Swal.fire(
+          'Eliminado!',
+          'El articulo ha sido eliminado',
+          'success'
+        )
+      }
+    })
+  }
 }
