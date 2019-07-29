@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -17,9 +17,19 @@ namespace WebAPI.Controllers
         private DBModel db = new DBModel();
 
         // GET: api/Orden
-        public IQueryable<Orden> GetOrden()
+        public System.Object GetOrden()
         {
-            return db.Orden;
+            var result = (from a in db.Orden
+                          join b in db.Cliente on a.ClienteId equals b.Id
+                          select new
+                          {
+                              a.Id,
+                              a.NoOrder,
+                              Cliente = b.Nombre,
+                              a.MetPago,
+                              a.PrecioTotal
+                          }).ToList();
+            return result;
         }
 
         // GET: api/Orden/5
@@ -74,15 +84,26 @@ namespace WebAPI.Controllers
         [ResponseType(typeof(Orden))]
         public IHttpActionResult PostOrden(Orden orden)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                //Orden Tabla
+                db.Orden.Add(orden);
+                //Tabla item 
+                foreach (var item in orden.OrdenItem)
+                {
+                    db.OrdenItem.Add(item);
+                }
+                db.SaveChanges();
+                //return CreatedAtRoute("DefaultApi", new { id = orden.Id }, orden);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
             }
 
-            db.Orden.Add(orden);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = orden.Id }, orden);
+          
         }
 
         // DELETE: api/Orden/5

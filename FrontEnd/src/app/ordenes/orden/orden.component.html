@@ -1,9 +1,8 @@
-<form #form="ngForm" autocomplete="off" *ngIf="_ordenService.formData">
+<form #form="ngForm" autocomplete="off" *ngIf="_ordenService.formData" (submit)="onSubmit(form)">
 
     <div class="row">
 
         <div class="col-md-6">
-
             <div class="form-group">
                 <label>No. Order</label>
                 <div class="input-group">
@@ -13,22 +12,21 @@
                     <input class="form-control" name="NoOrder" #NoOrder="ngModel"
                         [(ngModel)]="_ordenService.formData.NoOrder" readonly>
                 </div>
-
-
             </div>
 
             <div class="form-group">
                 <label>Cliente </label>
                 <select name="ClienteId" #ClienteId="ngModel" [(ngModel)]="_ordenService.formData.ClienteId"
-                    class="form-control">
+                    class="form-control"
+                    [class.is-invalid]="!isValid && _ordenService.formData.ClienteId == 0"
+                    >
                     <option value="0">--Seleccionar--</option>
+                    <option *ngFor="let item of clienteLista" value="{{item.Id}}" >{{item.Nombre}}</option>
                 </select>
             </div>
-
         </div>
 
         <div class="col-md-6">
-
             <div class="form-group">
                 <label>Metdo Pago</label>
                 <select class="form-control" name="MetPago" #MetPago="ngModel"
@@ -49,9 +47,9 @@
                         [(ngModel)]="_ordenService.formData.PrecioTotal" readonly>
                 </div>
             </div>
-
         </div>
     </div>
+
     <!-- Orden Items table-->
     <table class="table table-borderless">
         <thead class="thead-light">
@@ -67,7 +65,7 @@
             </th>
         </thead>
         <tbody>
-            <tr *ngIf="_ordenService.ordenItems.length==0">
+            <tr *ngIf="_ordenService.ordenItems.length==0"  [class.text-danger]="!isValid && _ordenService.ordenItems.length==0">
                 <td class="font-italic text-center" colspan="5">
                     No hay comida agregada
                 </td>
@@ -92,13 +90,10 @@
     </table>
 
     <div class="form-group">
-
         <button type="submit" class="btn btn-dark">
             <i class="fa fa-database"></i>
             Enviar
         </button>
-        
     </div>
-
 
 </form>
