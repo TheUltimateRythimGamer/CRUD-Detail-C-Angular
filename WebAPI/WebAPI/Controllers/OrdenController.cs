@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
                                      a.Cantidad,
                                      Total = a.Cantidad * b.Precio
                                  }).ToList();
-
+            //Lo logre
             return Ok(new { orden, ordenDetalles});
         }
 
