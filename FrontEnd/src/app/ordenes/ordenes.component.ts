@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdenService } from '../shared/orden.service';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ordenes',
@@ -9,11 +10,13 @@ import Swal from 'sweetalert2';
 })
 export class OrdenesComponent implements OnInit {
   ordenList;
-  constructor(private _ordenSer: OrdenService) { }
+  constructor(private _ordenSer: OrdenService,
+              private router:Router) { }
 
   ngOnInit() {
     this._ordenSer.getOrdenesList().then(res => {
       this.ordenList = res;
+      console.log(res);
     }, (err) => {
       Swal.fire({
         type: 'error',
@@ -22,6 +25,9 @@ export class OrdenesComponent implements OnInit {
       })
     }
     );
+  }
+  editOrden(ordenId:number){
+    this.router.navigate(['/orden/edit/'+ordenId]);
   }
 
 }

@@ -36,13 +36,32 @@ namespace WebAPI.Controllers
         [ResponseType(typeof(Orden))]
         public IHttpActionResult GetOrden(int id)
         {
-            Orden orden = db.Orden.Find(id);
-            if (orden == null)
-            {
-                return NotFound();
-            }
+            var orden = (from a in db.Orden
+                         where a.Id == id
+                         select new
+                         {
+                             a.Id,
+                             a.NoOrder,
+                             a.ClienteId,
+                             a.MetPago,
+                             a.PrecioTotal,
+                             DeletedOrdenItemIds = ""
+                         }).FirstOrDefault();
+            var ordenDetalles = (from a in db.OrdenItem
+                                 join b in db.Item on a.ItemId equals b.Id
+                                 where a.OrdenId == id
+                                 select new
+                                 {
+                                     a.OrdenId,
+                                     a.OrdenItemId,
+                                     a.ItemId,
+                                     NombreItem = b.Nombre,
+                                     b.Precio,
+                                     a.Cantidad,
+                                     Total = a.Cantidad * b.Precio
+                                 }).ToList();
 
-            return Ok(orden);
+            return Ok(new { orden, ordenDetalles});
         }
 
         // PUT: api/Orden/5
@@ -86,12 +105,25 @@ namespace WebAPI.Controllers
         {
             try
             {
+
                 //Orden Tabla
-                db.Orden.Add(orden);
+                if (orden.Id == 0)
+                    db.Orden.Add(orden);
                 //Tabla item 
+                else
+                    db.Entry(orden).State = EntityState.Modified;
                 foreach (var item in orden.OrdenItem)
                 {
-                    db.OrdenItem.Add(item);
+                    if(item.OrdenItemId == 0)
+                        db.OrdenItem.Add(item);
+                    else
+                        db.Entry(item).State = EntityState.Modified;
+                }
+                //Delete for ordenItems
+                foreach (var id in orden.DeletedOrdenItemIds.Split(',').Where(x=> x != ""))
+                {
+                    OrdenItem x = db.OrdenItem.Find(Convert.ToInt64(id));
+                    db.OrdenItem.Remove(x); 
                 }
                 db.SaveChanges();
                 //return CreatedAtRoute("DefaultApi", new { id = orden.Id }, orden);
