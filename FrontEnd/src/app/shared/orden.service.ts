@@ -24,7 +24,4 @@ export class OrdenService {
   public getOrdenesList(){
     return this.http.get(environment.apiURL+'/Orden').toPromise();
   }
-  public getOrdenById(id:number):any{
-    return this.http.get(environment.apiURL+'/Orden/'+id).toPromise();
-  }
 }

@@ -4,5 +4,4 @@ export class Orden {
     ClienteId:number;
     MetPago:string;
     PrecioTotal:number;
-    DeletedOrdenItemIds:string;
 }
