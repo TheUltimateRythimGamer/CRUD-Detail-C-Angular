@@ -6,7 +6,7 @@ import { OrdenItemsComponent } from '../orden-items/orden-items.component';
 import Swal from "sweetalert2";
 import { ClienteService } from 'src/app/shared/cliente.service';
 import { Cliente } from 'src/app/shared/cliente.model';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-orden',
@@ -21,32 +21,11 @@ export class OrdenComponent implements OnInit {
   constructor(public _ordenService: OrdenService, 
               private dialog:MatDialog,
               private _clienteService:ClienteService,
-              private router:Router,
-              private currentRoute : ActivatedRoute
+              private router:Router
     ) { }
 
   ngOnInit() {
-    let ordenID = this.currentRoute.snapshot.paramMap.get('id');
-    if(ordenID == null)
-      this.resetForm();
-    else{
-      this._ordenService.getOrdenById(parseInt(ordenID)).then(
-        res =>{
-          this._ordenService.formData = res.orden;
-          this._ordenService.ordenItems = res.ordenDetalles;
-          console.log(res);
-          
-        }, (err)=>{
-          Swal.fire({
-            type: 'error',
-            title: 'Error',
-            text: 'No hay conexion con el servidor lo sentimos :,('
-          });
-
-        }    
-      )
-    }
-
+    this.resetForm();
     this._clienteService.getClienteList().then(res  => this.clienteLista = res as Cliente[]);
     
   }
@@ -59,8 +38,7 @@ export class OrdenComponent implements OnInit {
       NoOrder: Math.floor(100000+Math.random()*9000000).toString(),
       ClienteId: 0,
       MetPago: '',
-      PrecioTotal: 0,
-      DeletedOrdenItemIds:''
+      PrecioTotal: 0
     }
     this._ordenService.ordenItems = [];
   }
@@ -84,9 +62,6 @@ export class OrdenComponent implements OnInit {
       cancelButtonText:'No lo elimines'
     }).then((result) => {
       if (result.value) {
-        if(ordenItemId != null){
-          this._ordenService.formData.DeletedOrdenItemIds += ordenItemId + ",";
-        }
         this._ordenService.ordenItems.splice(i,1);
         this.updateTotalFinal();
         Swal.fire(
@@ -116,7 +91,6 @@ export class OrdenComponent implements OnInit {
   onSubmit(form:NgForm){
     if(this.validateForm()){
       this._ordenService.saveOrUpdateOrden().subscribe(res =>{
-        
         this.resetForm();
         Swal.fire({
           title: 'Listo!!!',
