@@ -1,0 +1,104 @@
+<form #form="ngForm" autocomplete="off" *ngIf="_ordenService.formData" (submit)="onSubmit(form)">
+<input type="hidden" name="Id" #Id="ngModel" [(ngModel)]="_ordenService.formData.Id" >
+
+    <div class="row">
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>No. Order</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">#</div>
+                    </div>
+                    <input class="form-control" name="NoOrder" #NoOrder="ngModel"
+                        [(ngModel)]="_ordenService.formData.NoOrder" readonly>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Cliente </label>
+                <select name="ClienteId" #ClienteId="ngModel" [(ngModel)]="_ordenService.formData.ClienteId"
+                    class="form-control"
+                    [class.is-invalid]="!isValid && _ordenService.formData.ClienteId == 0"
+                    >
+                    <option value="0">--Seleccionar--</option>
+                    <option *ngFor="let item of clienteLista" value="{{item.Id}}" >{{item.Nombre}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Metdo Pago</label>
+                <select class="form-control" name="MetPago" #MetPago="ngModel"
+                    [(ngModel)]="_ordenService.formData.MetPago">
+                    <option value="">--Seleccionar--</option>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Tarjeta">Tarjeta</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Precio Total</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">$</div>
+                    </div>
+                    <input class="form-control" name="PrecioTotal" #PrecioTotal="ngModel"
+                        [(ngModel)]="_ordenService.formData.PrecioTotal" readonly>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orden Items table-->
+    <table class="table table-borderless">
+        <thead class="thead-light">
+            <th>Comida</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Total</th>
+            <th>
+                <a class="btn btn-sm btn-success text-white"
+                    (click)="AddOrEditOrdenItem(null,_ordenService.formData.Id)">
+                    <i class="fa fa-plus"></i> Añadir nuevo
+                </a>
+            </th>
+        </thead>
+        <tbody>
+            <tr *ngIf="_ordenService.ordenItems.length==0"  [class.text-danger]="!isValid && _ordenService.ordenItems.length==0">
+                <td class="font-italic text-center" colspan="5">
+                    No hay comida agregada
+                </td>
+            </tr>
+            <tr *ngFor="let item of _ordenService.ordenItems; let i = index;">
+                <td>{{item.NombreItem}}</td>
+                <td>{{item.Precio}}</td>
+                <td>{{item.Cantidad}}</td>
+                <td> $ {{item.Total}} </td>
+                <td>
+                    <a class="btn btn-sm btn-info text-white"
+                        (click)="AddOrEditOrdenItem(i,_ordenService.formData.Id)">
+                        <i class="fa fa-pencil"></i>
+                    </a>
+                    <a class="btn btn-sm btn-danger text-white ml-1"
+                        (click)="onDeleteOrdenItem(item.OrdenItemId,i,_ordenService.formData.Id)">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-dark">
+            <i class="fa fa-database"></i>
+            Enviar
+        </button>
+        <a class="btn btn-outline-dark ml-1" [routerLink]="['/ordenes']">
+            <i class="fa fa-plus-table"></i>
+            Listado de Ordenes
+        </a>
+    </div>
+
+</form>
