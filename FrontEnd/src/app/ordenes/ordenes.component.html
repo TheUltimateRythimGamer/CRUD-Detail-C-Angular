@@ -4,7 +4,7 @@
         <th>Cliente</th>
         <th>Metodo de Pago</th>
         <th>Total</th>
-        <th> 
+        <th>
             <a class="btn btn-outline-success" [routerLink]="['/orden']">
                 <i class="fa fa-plus-square"></i>
                 Agregar uno
@@ -13,11 +13,19 @@
     </thead>
     <tbody>
         <tr *ngFor="let item of ordenList">
-            <td (click)="editOrden(item.Id)">{{item.NoOrder}}</td>
+            <td>{{item.NoOrder}}</td>
             <td>{{item.Cliente}} </td>
             <td>{{item.MetPago}}</td>
             <td>$ {{item.PrecioTotal}}</td>
-            <td></td>
+            <td>
+                <a class="btn btn-danger mr-1" (click)="onOrdenDelete(item.Id)">
+                    <i class="fa fa-trash fa-lg"></i>
+                </a>
+
+                <a class="btn btn-info text-white" (click)="editOrden(item.Id)">
+                    <i class="fa fa-pencil"></i>
+                </a>
+            </td>
         </tr>
     </tbody>
 </table>

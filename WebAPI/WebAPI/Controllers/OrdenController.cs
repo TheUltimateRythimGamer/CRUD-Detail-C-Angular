@@ -140,12 +140,13 @@ namespace WebAPI.Controllers
 
         // DELETE: api/Orden/5
         [ResponseType(typeof(Orden))]
-        public IHttpActionResult DeleteOrden(int id)
+        public IHttpActionResult DeleteOrden(long id)
         {
-            Orden orden = db.Orden.Find(id);
-            if (orden == null)
+            Orden orden = db.Orden.Include(y => y.OrdenItem)
+                .SingleOrDefault(x => x.Id == id);
+            foreach(var item in orden.OrdenItem.ToList())
             {
-                return NotFound();
+                db.OrdenItem.Remove(item);
             }
 
             db.Orden.Remove(orden);

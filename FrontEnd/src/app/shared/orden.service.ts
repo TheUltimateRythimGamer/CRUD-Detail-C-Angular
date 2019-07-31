@@ -27,4 +27,7 @@ export class OrdenService {
   public getOrdenById(id:number):any{
     return this.http.get(environment.apiURL+'/Orden/'+id).toPromise();
   }
+  public deleteOrdenById(id:number){
+    return this.http.delete(environment.apiURL+'/Orden/'+id ).toPromise();
+  }
 }
